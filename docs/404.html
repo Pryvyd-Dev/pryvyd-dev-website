@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Pryvyd Dev</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111;
+      --border: rgba(255,255,255,0.08);
+      --text: #f2f2f2; --muted: #555; --accent: #7f6fff;
+      --font-head: 'Syne', sans-serif; --font-mono: 'Space Mono', monospace;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font-mono); min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem; text-align: center; position: relative; overflow: hidden;
+    }
+    body::before {
+      content: '404';
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-family: var(--font-head); font-size: clamp(12rem, 30vw, 22rem);
+      font-weight: 800; color: rgba(127,111,255,0.04);
+      pointer-events: none; user-select: none; white-space: nowrap;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2.5rem;
+      background: rgba(10,10,10,0.94); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+    nav ul { display: flex; gap: 1.8rem; list-style: none; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    nav a:hover { color: var(--text); }
+
+    .content { position: relative; z-index: 1; }
+    .error-tag {
+      font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid rgba(127,111,255,0.25);
+      padding: 0.35rem 0.9rem; margin-bottom: 2rem; display: inline-block;
+    }
+    h1 {
+      font-family: var(--font-head); font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 800; letter-spacing: -0.04em; margin-bottom: 1rem;
+    }
+    p { font-size: 0.82rem; color: var(--muted); line-height: 1.9; margin-bottom: 2.5rem; max-width: 380px; }
+    .btn-group { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+    .btn { display: inline-flex; align-items: center; padding: 0.72rem 1.6rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 1px solid; transition: all 0.22s; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-outline { background: transparent; border-color: rgba(255,255,255,0.16); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--text); color: var(--text); }
+
+    @media (max-width: 640px) { nav { padding: 0.85rem 1.2rem; } nav ul { gap: 1rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Pryvyd &gt; Dev</a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="content">
+  <span class="error-tag">// Error 404</span>
+  <h1>Page not found</h1>
+  <p>Looks like this page doesn't exist or was moved. Let's get you back on track.</p>
+  <div class="btn-group">
+    <a href="index.html" class="btn btn-primary">Back to Home</a>
+    <a href="projects.html" class="btn btn-outline">View Projects</a>
+  </div>
+</div>
+
+</body>
+</html>

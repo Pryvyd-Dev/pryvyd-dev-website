@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Pryvyd Dev</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --surface2: #181818;
+      --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+      --text: #f2f2f2; --muted: #555; --accent: #7f6fff;
+      --green: #3dd6b5; --red: #ff6b6b; --amber: #f5a623;
+      --font-head: 'Syne', sans-serif; --font-mono: 'Space Mono', monospace;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2.5rem; background: rgba(10,10,10,0.94);
+      backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+    
+    nav ul { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--text); }
+    .lang-switcher { display: flex; border: 1px solid var(--border); overflow: hidden; }
+    .lang-btn { background: transparent; border: none; cursor: pointer; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0.32rem 0.65rem; transition: all 0.2s; }
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:not(.active):hover { color: var(--text); }
+
+    .page-header { padding: 8rem 2.5rem 4rem; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; }
+    .page-tag { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-family: var(--font-head); font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 800; letter-spacing: -0.04em; }
+    .header-desc { font-size: 0.8rem; color: var(--muted); line-height: 2; }
+
+    .manifesto { padding: 4rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .manifesto blockquote { font-family: var(--font-head); font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 600; line-height: 1.4; letter-spacing: -0.02em; border-left: 2px solid var(--accent); padding-left: 2rem; max-width: 680px; }
+    blockquote em { color: var(--green); font-style: normal; }
+
+    .section { padding: 4rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 2.2rem; flex-wrap: wrap; }
+    .section-tag { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+    .section-title { font-family: var(--font-head); font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -0.03em; }
+
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .value-item { background: var(--surface); padding: 1.8rem; transition: background 0.2s; }
+    .value-item:hover { background: var(--surface2); }
+    .value-num { font-size: 0.58rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+    .value-title { font-family: var(--font-head); font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .value-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.95; }
+
+    /* TEAM */
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .member-card { background: var(--surface); padding: 2rem; transition: background 0.2s; position: relative; overflow: hidden; }
+    .member-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .member-card:nth-child(1)::before { background: var(--accent); }
+    .member-card:nth-child(2)::before { background: var(--green); }
+    .member-card:nth-child(3)::before { background: var(--red); }
+    .member-card:nth-child(4)::before { background: #ff6fff; }
+    .member-card:nth-child(5)::before { background: var(--amber); }
+    .member-card:hover { background: var(--surface2); }
+    .member-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+    .member-avatar { width: 44px; height: 44px; background: var(--surface2); border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: var(--accent); flex-shrink: 0; }
+    .member-card:nth-child(2) .member-avatar { color: var(--green); }
+    .member-card:nth-child(3) .member-avatar { color: var(--red); }
+    .member-card:nth-child(4) .member-avatar { color: #ff6fff; }
+    .member-card:nth-child(5) .member-avatar { color: var(--amber); }
+    .member-name { font-family: var(--font-head); font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .member-role { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .member-bio { font-size: 0.7rem; color: var(--muted); line-height: 1.95; margin-bottom: 1rem; }
+    .member-langs { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .lang-pill { font-size: 0.58rem; padding: 0.18rem 0.5rem; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.06em; }
+
+    /* STACK */
+    .stack-section { padding: 4rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .stack-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 2rem; }
+    .stack-cat { background: var(--surface); padding: 1.8rem; transition: background 0.2s; }
+    .stack-cat:hover { background: var(--surface2); }
+    .stack-cat-label { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .stack-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .stack-tag { border: 1px solid var(--border); padding: 0.35rem 0.7rem; font-size: 0.65rem; color: var(--text); letter-spacing: 0.04em; transition: all 0.2s; cursor: default; }
+    .stack-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* SOCIAL */
+    .social-section { padding: 4rem 2.5rem; }
+    .social-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .social-link { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid var(--border); padding: 0.55rem 1.1rem; font-size: 0.65rem; color: var(--muted); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s; }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .footer-logo { height: 38px; width: auto; opacity: 0.65; }
+    .footer-nav { display: flex; gap: 1.5rem; }
+    .footer-nav a { font-size: 0.65rem; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
+    .footer-nav a:hover { color: var(--text); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-right { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .footer-version { color: var(--accent); font-size: 0.6rem; margin-left: 0.5rem; cursor: default; position: relative; }
+    .footer-version:hover::after { content: "Updated: " attr(data-date) " — No changes yet"; position: absolute; bottom: 1.4rem; right: 0; background: #1c1c1c; border: 1px solid rgba(255,255,255,0.16); color: #f2f2f2; font-size: 0.6rem; padding: 0.5rem 0.8rem; white-space: nowrap; z-index: 10; letter-spacing: 0.04em; }
+    .footer-copy { font-size: 0.63rem; color: var(--muted); }
+    .footer-social { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .footer-social a { font-size: 0.63rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-social a:hover { color: var(--text); }
+
+    @media (max-width: 768px) { .page-header { grid-template-columns: 1fr; gap: 2rem; } }
+    @media (max-width: 640px) {
+      nav { padding: 0.85rem 1.2rem; } nav ul { gap: 1rem; }
+      .page-header { padding: 7rem 1.2rem 2.5rem; }
+      .manifesto, .section, .stack-section, .social-section { padding: 3rem 1.2rem; }
+      footer { padding: 1.5rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Pryvyd &gt; Dev</a>
+  <ul>
+    <li><a href="index.html" data-en="Home" data-uk="Головна">Home</a></li>
+    <li><a href="projects.html" data-en="Projects" data-uk="Проєкти">Projects</a></li>
+    <li><a href="about.html" class="active" data-en="About" data-uk="Про нас">About</a></li>
+    <li><a href="news.html" data-en="News" data-uk="Новини">News</a></li>
+    <li>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('uk')">UK</button>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<header class="page-header">
+  <div>
+    <p class="page-tag" data-en="// Who we are" data-uk="// Хто ми" data-pl="// Kim jesteśmy">// Who we are</p>
+    <h1 class="page-title" data-en="About us" data-uk="Про нас" data-pl="O nas">About us</h1>
+  </div>
+  <p class="header-desc" data-en="Pryvyd Dev is a team of developers building quality digital products. We write code, design systems and deliver solutions that truly work." data-uk="Pryvyd Dev — команда розробників, яка будує якісні цифрові продукти. Ми пишемо код, проєктуємо системи і доставляємо рішення, які справді працюють.">
+    Pryvyd Dev is a team of developers building quality digital products. We write code, design systems and deliver solutions that truly work. Founded April 12, 2026.
+  </p>
+</header>
+
+<section class="manifesto">
+  <blockquote>
+    <span data-en='"We write code to solve problems —' data-uk='"Ми пишемо код, щоб вирішувати задачі —'>"We write code to solve problems —</span><br>
+    <em><span data-en='not to impress, but to work."' data-uk='не щоб вражати, а щоб працювало."'>not to impress, but to work."</span></em>
+  </blockquote>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-tag" data-en="// Our principles" data-uk="// Наші принципи">// Our principles</span>
+    <h2 class="section-title" data-en="What drives us" data-uk="Що нами рухає">What drives us</h2>
+  </div>
+  <div class="values-grid">
+    <div class="value-item">
+      <p class="value-num">01</p>
+      <h3 class="value-title" data-en="Code quality" data-uk="Якість коду">Code quality</h3>
+      <p class="value-desc" data-en="We write clean, maintainable code with understanding. Technical debt is not our style." data-uk="Пишемо чисто, підтримувано і з розумінням. Технічний борг — не наш стиль.">We write clean, maintainable code with understanding. Technical debt is not our style.</p>
+    </div>
+    <div class="value-item">
+      <p class="value-num">02</p>
+      <h3 class="value-title" data-en="Real solutions" data-uk="Реальні рішення">Real solutions</h3>
+      <p class="value-desc" data-en="We focus on results, not process. If something doesn't solve the problem — we cut it." data-uk="Фокусуємось на результаті, а не на процесі. Якщо щось не вирішує задачу — ми це прибираємо.">We focus on results, not process. If something doesn't solve the problem — we cut it.</p>
+    </div>
+    <div class="value-item">
+      <p class="value-num">03</p>
+      <h3 class="value-title" data-en="Constant growth" data-uk="Постійний ріст">Constant growth</h3>
+      <p class="value-desc" data-en="Technology changes — so do we. We learn, adapt, improve." data-uk="Технології змінюються — ми теж. Вчимось, адаптуємось, вдосконалюємось.">Technology changes — so do we. We learn, adapt, improve.</p>
+    </div>
+    <div class="value-item">
+      <p class="value-num">04</p>
+      <h3 class="value-title" data-en="Team spirit" data-uk="Командний дух">Team spirit</h3>
+      <p class="value-desc" data-en="Every team member matters. Together we move faster and further." data-uk="Кожен у команді — важлива частина. Разом ми рухаємось швидше та далі.">Every team member matters. Together we move faster and further.</p>
+    </div>
+    <div class="value-item">
+      <p class="value-num">05</p>
+      <h3 class="value-title" data-en="Open development" data-uk="Відкрита розробка">Open development</h3>
+      <p class="value-desc" data-en="We share our progress publicly. What we build is visible — no black boxes, no hidden work." data-uk="Ми ділимось прогресом публічно. Те, що ми будуємо — видно. Без чорних скриньок, без прихованої роботи.">We share our progress publicly. What we build is visible — no black boxes, no hidden work.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-header">
+    <span class="section-tag" data-en="// The team" data-uk="// Команда">// The team</span>
+    <h2 class="section-title" data-en="Our people" data-uk="Наші люди">Our people</h2>
+  </div>
+  <div class="team-grid">
+
+    <div class="member-card">
+      <div class="member-top">
+        <div class="member-avatar">RS</div>
+        <div>
+          <h3 class="member-name">Roman Sushko</h3>
+          <p class="member-role" data-en="Founder / Developer" data-uk="Засновник / Розробник">Founder / Developer</p>
+        </div>
+      </div>
+      <p class="member-bio" data-en="Develops software and leads the team. Responsible for architecture and core systems." data-uk="Розробляє програмне забезпечення та керує командою. Відповідає за архітектуру та основні системи.">Develops software and leads the team. Responsible for architecture and core systems.</p>
+      <div class="member-langs">
+        <span class="lang-pill">C++</span>
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">Java</span>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="member-top">
+        <div class="member-avatar">NZ</div>
+        <div>
+          <h3 class="member-name" data-en="Neznanyy" data-uk="Neznanyy">Neznanyy</h3>
+          <p class="member-role" data-en="Game Developer" data-uk="Розробник ігор">Game Developer</p>
+        </div>
+      </div>
+      <p class="member-bio" data-en="Develops games from concept to release. Handles game logic, mechanics, and engine integration." data-uk="Розробляє ігри від концепту до релізу. Відповідає за ігрову логіку, механіки та інтеграцію з рушіями.">Develops games from concept to release. Handles game logic, mechanics, and engine integration.</p>
+      <div class="member-langs">
+        <span class="lang-pill">C++</span>
+        <span class="lang-pill">C#</span>
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">Java</span>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="member-top">
+        <div class="member-avatar">RO</div>
+        <div>
+          <h3 class="member-name" data-en="ROSUVO" data-uk="ROSUVO">ROSUVO</h3>
+          <p class="member-role" data-en="Web Developer" data-uk="Веб-розробник">Web Developer</p>
+        </div>
+      </div>
+      <p class="member-bio" data-en="Designs and builds websites. Handles frontend, backend, and database integration." data-uk="Проєктує та розробляє веб-сайти. Відповідає за фронтенд, бекенд та роботу з базами даних.">Designs and builds websites. Handles frontend, backend, and database integration.</p>
+      <div class="member-langs">
+        <span class="lang-pill">HTML</span>
+        <span class="lang-pill">CSS</span>
+        <span class="lang-pill">JavaScript</span>
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">SQL</span>
+        <span class="lang-pill">PHP</span>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="member-top">
+        <div class="member-avatar">0I</div>
+        <div>
+          <h3 class="member-name" data-en="0ilun7" data-uk="0ilun7">0ilun7</h3>
+          <p class="member-role" data-en="UI / UX Designer" data-uk="UI / UX Дизайнер">UI / UX Designer</p>
+        </div>
+      </div>
+      <p class="member-bio" data-en="Designs interfaces and user experiences. Responsible for the visual identity and feel of every product." data-uk="Проєктує інтерфейси та користувацький досвід. Відповідає за візуальну ідентичність кожного продукту.">Designs interfaces and user experiences. Responsible for the visual identity and feel of every product.</p>
+      <div class="member-langs">
+        <span class="lang-pill">Figma</span>
+        <span class="lang-pill">UI Design</span>
+        <span class="lang-pill">UX Research</span>
+      </div>
+    </div>
+
+    <div class="member-card">
+      <div class="member-top">
+        <div class="member-avatar">SP</div>
+        <div>
+          <h3 class="member-name" data-en="Slid Pryvyda" data-uk="Слід Привида">Slid Pryvyda</h3>
+          <p class="member-role" data-en="Cybersecurity Lead" data-uk="Керівник кібербезпеки">Cybersecurity Lead</p>
+        </div>
+      </div>
+      <p class="member-bio" data-en="Leads cybersecurity efforts. Handles vulnerability research, security analysis, and system hardening." data-uk="Керує напрямком кібербезпеки. Займається дослідженням вразливостей, аналізом безпеки та захистом систем.">Leads cybersecurity efforts. Handles vulnerability research, security analysis, and system hardening.</p>
+      <div class="member-langs">
+        <span class="lang-pill">Python</span>
+        <span class="lang-pill">C++</span>
+        <span class="lang-pill">Linux</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="stack-section">
+  <div class="section-header">
+    <span class="section-tag" data-en="// Technologies" data-uk="// Технології">// Technologies</span>
+    <h2 class="section-title" data-en="Our stack" data-uk="Наш стек">Our stack</h2>
+  </div>
+  <div class="stack-categories">
+    <div class="stack-cat">
+      <div class="stack-cat-label" data-en="Languages" data-uk="Мови">Languages</div>
+      <div class="stack-tags">
+        <span class="stack-tag">C++</span>
+        <span class="stack-tag">C#</span>
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">Java</span>
+        <span class="stack-tag">JavaScript</span>
+        <span class="stack-tag">PHP</span>
+        <span class="stack-tag">SQL</span>
+      </div>
+    </div>
+    <div class="stack-cat">
+      <div class="stack-cat-label" data-en="Web" data-uk="Веб">Web</div>
+      <div class="stack-tags">
+        <span class="stack-tag">HTML</span>
+        <span class="stack-tag">CSS</span>
+        <span class="stack-tag">JavaScript</span>
+        <span class="stack-tag">PHP</span>
+        <span class="stack-tag">SQL</span>
+      </div>
+    </div>
+    <div class="stack-cat">
+      <div class="stack-cat-label" data-en="Platforms" data-uk="Платформи">Platforms</div>
+      <div class="stack-tags">
+        <span class="stack-tag">Windows</span>
+        <span class="stack-tag">macOS</span>
+        <span class="stack-tag">Linux</span>
+      </div>
+    </div>
+    <div class="stack-cat">
+      <div class="stack-cat-label" data-en="Tools" data-uk="Інструменти">Tools</div>
+      <div class="stack-tags">
+        <span class="stack-tag">Git</span>
+        <span class="stack-tag">GitHub</span>
+        <span class="stack-tag">Figma</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="social-section">
+  <div class="section-header">
+    <span class="section-tag" data-en="// Find us" data-uk="// Ми онлайн">// Find us</span>
+    <h2 class="section-title" data-en="Social Media" data-uk="Соціальні мережі">Social Media</h2>
+  </div>
+  <div class="social-grid">
+    <a href="https://github.com/Pryvyd-Dev" class="social-link" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.instagram.com/pryvyd.dev/" class="social-link" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.linkedin.com/in/pryvyd-dev/" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.reddit.com/user/pryvyddev/" class="social-link" target="_blank" rel="noopener">Reddit</a>
+    <a href="https://www.twitch.tv/pryvyddev" class="social-link" target="_blank" rel="noopener">Twitch</a>
+    <a href="https://x.com/pryvyddev" class="social-link" target="_blank" rel="noopener">X</a>
+    <a href="https://www.youtube.com/@pryvyd-dev" class="social-link" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Pryvyd Dev. All rights reserved.</span>
+    <div class="footer-right"><div class="footer-social">
+      <a href="https://github.com/Pryvyd-Dev" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/pryvyd-dev/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.instagram.com/pryvyd.dev/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://x.com/pryvyddev" target="_blank" rel="noopener">X</a>
+    </div>
+    <span class="footer-version">v1.0</span></div>
+  </div>
+</footer>
+
+<script>
+  function updateTooltip() {
+    const d = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const date = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    document.querySelectorAll('.footer-version').forEach(el => {
+      el.setAttribute('data-date', date);
+    });
+  }
+  updateTooltip();
+
+  function setLang(lang) {
+    localStorage.setItem('pd_lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === lang));
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      if (val) el.textContent = val;
+    });
+    document.documentElement.lang = lang;
+  }
+  (function() {
+    const saved = localStorage.getItem('pd_lang') || 'en';
+    if (saved !== 'en') setLang(saved);
+  })();
+</script>
+</body>
+</html>
