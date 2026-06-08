@@ -3,7 +3,7 @@
 > Creating software, games, websites, and digital experiences.
 > We write code to solve problems — not to impress, but to work.
 
-🌐 **Live site:** `https://<your-username>.github.io/pryvyd-dev`
+🌐 **Live site:** `https://pryvyd-dev.github.io/pryvyd-dev-website/index.html`
 
 ---
 
