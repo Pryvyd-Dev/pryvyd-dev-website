@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News — Pryvyd Dev</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --surface2: #181818;
+      --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+      --text: #f2f2f2; --muted: #555; --accent: #7f6fff;
+      --green: #3dd6b5; --red: #ff6b6b; --amber: #f5a623;
+      --font-head: 'Syne', sans-serif; --font-mono: 'Space Mono', monospace;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2.5rem; background: rgba(10,10,10,0.94);
+      backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+    nav ul { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--text); }
+    .lang-switcher { display: flex; border: 1px solid var(--border); overflow: hidden; }
+    .lang-btn { background: transparent; border: none; cursor: pointer; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0.32rem 0.65rem; transition: all 0.2s; }
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:not(.active):hover { color: var(--text); }
+
+    .page-header { padding: 8rem 2.5rem 3rem; border-bottom: 1px solid var(--border); }
+    .page-tag { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-family: var(--font-head); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 0.8rem; }
+    .page-desc { font-size: 0.8rem; color: var(--muted); max-width: 440px; line-height: 1.95; }
+
+    /* NEWS LIST */
+    .news-list { padding: 2.5rem; display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 2.5rem; }
+    .news-item {
+      background: var(--surface); padding: 2rem 2rem 2rem 2rem;
+      display: grid; grid-template-columns: 140px 1fr; gap: 2rem;
+      transition: background 0.2s; position: relative; overflow: hidden;
+    }
+    .news-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); opacity: 0; transition: opacity 0.2s; }
+    .news-item:hover { background: var(--surface2); }
+    .news-item:hover::before { opacity: 1; }
+    .news-item.new::before { opacity: 1; background: var(--green); }
+    .news-meta { display: flex; flex-direction: column; gap: 0.5rem; padding-top: 0.2rem; }
+    .news-date { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; }
+    .news-badge { display: inline-block; font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.2rem 0.5rem; border: 1px solid; align-self: flex-start; }
+    .badge-launch { color: var(--accent); border-color: rgba(127,111,255,0.3); }
+    .badge-update { color: var(--green); border-color: rgba(61,214,181,0.3); }
+    .badge-team { color: var(--amber); border-color: rgba(245,166,35,0.3); }
+    .news-content { display: flex; flex-direction: column; gap: 0.6rem; }
+    .news-title { font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+    .news-body { font-size: 0.75rem; color: var(--muted); line-height: 1.95; }
+    .news-new-tag { display: inline-block; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,214,181,0.3); padding: 0.18rem 0.5rem; margin-left: 0.5rem; vertical-align: middle; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    footer { border-top: 1px solid var(--border); padding: 1.5rem 2.5rem; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-right { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .footer-copy { font-size: 0.63rem; color: var(--muted); }
+    .footer-version { color: var(--accent); font-size: 0.6rem; cursor: default; position: relative; }
+    .footer-version:hover::after { content: "Updated: " attr(data-date) " — No changes yet"; position: absolute; bottom: 1.4rem; right: 0; background: #1c1c1c; border: 1px solid rgba(255,255,255,0.16); color: #f2f2f2; font-size: 0.6rem; padding: 0.5rem 0.8rem; white-space: nowrap; z-index: 10; letter-spacing: 0.04em; }
+    .footer-social { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .footer-social a { font-size: 0.63rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-social a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0.85rem 1.2rem; } nav ul { gap: 1rem; }
+      .page-header { padding: 7rem 1.2rem 2.5rem; }
+      .news-list { margin: 1.5rem 0; padding: 1.5rem; }
+      .news-item { grid-template-columns: 1fr; gap: 0.8rem; }
+      footer { padding: 1.5rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Pryvyd &gt; Dev</a>
+  <ul>
+    <li><a href="index.html" data-en="Home" data-uk="Головна">Home</a></li>
+    <li><a href="projects.html" data-en="Projects" data-uk="Проєкти">Projects</a></li>
+    <li><a href="about.html" data-en="About" data-uk="Про нас">About</a></li>
+    <li><a href="news.html" class="active" data-en="News" data-uk="Новини">News</a></li>
+    <li>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('uk')">UK</button>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<header class="page-header">
+  <p class="page-tag" data-en="// Latest updates" data-uk="// Останні оновлення">// Latest updates</p>
+  <h1 class="page-title" data-en="News" data-uk="Новини">News</h1>
+  <p class="page-desc" data-en="Organization updates, team changes, and project announcements." data-uk="Оновлення організації, зміни в команді та анонси проєктів.">Organization updates, team changes, and project announcements.</p>
+</header>
+
+<div class="news-list">
+
+  <div class="news-item new">
+    <div class="news-meta">
+      <span class="news-date">Jun 7, 2026</span>
+      <span class="news-badge badge-launch" data-en="Launch" data-uk="Запуск">Launch</span>
+    </div>
+    <div class="news-content">
+      <h2 class="news-title" data-en="Website launched" data-uk="Сайт запущено">
+        Website launched <span class="news-new-tag">new</span>
+      </h2>
+      <p class="news-body" data-en="Our official website is now live. Five pages — Home, Projects, About, News, and a custom 404 — with English and Ukrainian language support. Includes team profiles, tech stack, social links, and a version indicator." data-uk="Наш офіційний сайт тепер доступний. П'ять сторінок — Головна, Проєкти, Про нас, Новини та кастомна 404 — з підтримкою англійської та української мов. Включає профілі команди, стек технологій, посилання на соцмережі та індикатор версії.">Our official website is now live. Five pages — Home, Projects, About, News, and a custom 404 — with English and Ukrainian language support. Includes team profiles, tech stack, social links, and a version indicator.</p>
+    </div>
+  </div>
+
+  <div class="news-item">
+    <div class="news-meta">
+      <span class="news-date">Apr 12, 2026</span>
+      <span class="news-badge badge-team" data-en="Team" data-uk="Команда">Team</span>
+    </div>
+    <div class="news-content">
+      <h2 class="news-title" data-en="Pryvyd Dev founded" data-uk="Pryvyd Dev засновано">
+        Pryvyd Dev founded
+      </h2>
+      <p class="news-body" data-en="Pryvyd Dev was officially founded on April 12, 2026. The team consists of developers specializing in software, games, web, design, and cybersecurity." data-uk="Pryvyd Dev офіційно засновано 12 квітня 2026 року. Команда складається з розробників, що спеціалізуються на програмах, іграх, вебі, дизайні та кібербезпеці.">Pryvyd Dev was officially founded on April 12, 2026. The team consists of developers specializing in software, games, web, design, and cybersecurity.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Pryvyd Dev. All rights reserved.</span>
+    <div class="footer-right"><div class="footer-social">
+      <a href="https://github.com/Pryvyd-Dev" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/pryvyd-dev/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.instagram.com/pryvyd.dev/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://x.com/pryvyddev" target="_blank" rel="noopener">X</a>
+    </div>
+    <span class="footer-version">v1.0</span></div>
+  </div>
+</footer>
+
+<script>
+  function updateTooltip() {
+    const d = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const date = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    document.querySelectorAll('.footer-version').forEach(el => {
+      el.setAttribute('data-date', date);
+    });
+  }
+  updateTooltip();
+
+  function setLang(lang) {
+    localStorage.setItem('pd_lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === lang));
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      if (val) el.textContent = val;
+    });
+    document.documentElement.lang = lang;
+  }
+  (function() {
+    const saved = localStorage.getItem('pd_lang') || 'en';
+    if (saved !== 'en') setLang(saved);
+  })();
+</script>
+</body>
+</html>

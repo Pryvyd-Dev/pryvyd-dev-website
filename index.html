@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pryvyd Dev</title>
+  <meta name="description" content="Pryvyd Dev — a team building software, games, websites, and cybersecurity solutions." />
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0a; --surface: #111111; --surface2: #181818;
+      --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+      --text: #f2f2f2; --muted: #555; --accent: #7f6fff;
+      --green: #3dd6b5; --red: #ff6b6b; --amber: #f5a623;
+      --font-head: 'Syne', sans-serif; --font-mono: 'Space Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.85rem 2.5rem;
+      background: rgba(10,10,10,0.94); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.1rem; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+    
+    .nav-wordmark { height: 28px; width: auto; opacity: 0.9; }
+    nav ul { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+    nav a:hover, nav a.active { color: var(--text); }
+    .lang-switcher { display: flex; border: 1px solid var(--border); overflow: hidden; }
+    .lang-btn { background: transparent; border: none; cursor: pointer; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0.32rem 0.65rem; transition: all 0.2s; }
+    .lang-btn.active { background: var(--accent); color: #fff; }
+    .lang-btn:not(.active):hover { color: var(--text); }
+
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: center;
+      padding: 8rem 2.5rem 4rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -15%; right: -5%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(127,111,255,0.09) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: 5%; left: 30%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(61,214,181,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 2rem; }
+    .hero-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .hero-tag { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+    h1 { font-family: var(--font-head); font-size: clamp(4rem, 10vw, 9rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.04em; margin-bottom: 2.2rem; }
+    h1 em { color: var(--accent); font-style: normal; display: block; }
+    .hero-desc { font-size: 0.83rem; color: var(--muted); max-width: 420px; line-height: 2; margin-bottom: 2.5rem; }
+    .btn-group { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.72rem 1.6rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 1px solid; transition: all 0.22s; cursor: pointer; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-outline { background: transparent; border-color: var(--border-strong); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--text); color: var(--text); }
+
+    .lang-strip { width: 100%; max-width: 580px; margin-top: 5rem; display: flex; border: 1px solid var(--border); }
+    .lang-item { flex: 1; padding: 1.1rem 1.4rem; border-right: 1px solid var(--border); transition: background 0.2s; }
+    .lang-item:last-child { border-right: none; }
+    .lang-item:hover { background: var(--surface); }
+    .lang-label { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .lang-name { font-family: var(--font-head); font-size: 1.3rem; font-weight: 800; }
+    .lang-item:nth-child(1) .lang-name { color: var(--accent); }
+    .lang-item:nth-child(2) .lang-name { color: var(--green); }
+    .lang-item:nth-child(3) .lang-name { color: var(--red); }
+    .lang-item:nth-child(4) .lang-name { color: var(--amber); }
+
+    .section { padding: 5rem 2.5rem; border-top: 1px solid var(--border); }
+    .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .section-tag { font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+    .section-title { font-family: var(--font-head); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .card { background: var(--surface); padding: 2.2rem 2rem; transition: background 0.2s; position: relative; overflow: hidden; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; transition: background 0.3s; }
+    .card:nth-child(1):hover::before { background: var(--accent); }
+    .card:nth-child(2):hover::before { background: var(--green); }
+    .card:nth-child(3):hover::before { background: var(--red); }
+    .card:nth-child(4):hover::before { background: #ff6fff; }
+    .card:nth-child(5):hover::before { background: var(--amber); }
+    .card:nth-child(6):hover::before { background: #00d4d4; }
+    .card:hover { background: var(--surface2); }
+    .card-num { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+    .card-title { font-family: var(--font-head); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .card-desc { font-size: 0.73rem; color: var(--muted); line-height: 1.95; }
+
+    .social-section { padding: 4rem 2.5rem; border-top: 1px solid var(--border); }
+    .social-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .social-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid var(--border); padding: 0.55rem 1.1rem;
+      font-size: 0.65rem; color: var(--muted); text-decoration: none;
+      letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.2s;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; }
+    .footer-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .footer-logo { height: 38px; width: auto; opacity: 0.65; }
+    .footer-nav { display: flex; gap: 1.5rem; }
+    .footer-nav a { font-size: 0.65rem; color: var(--muted); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
+    .footer-nav a:hover { color: var(--text); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-right { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .footer-version { color: var(--accent); font-size: 0.6rem; margin-left: 0.5rem; cursor: default; position: relative; }
+    .footer-version:hover::after { content: "Updated: " attr(data-date) " — No changes yet"; position: absolute; bottom: 1.4rem; right: 0; background: var(--surface2); border: 1px solid var(--border-strong); color: var(--text); font-size: 0.6rem; padding: 0.5rem 0.8rem; white-space: nowrap; z-index: 10; letter-spacing: 0.04em; }
+    .footer-copy { font-size: 0.63rem; color: var(--muted); }
+    .footer-social { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .footer-social a { font-size: 0.63rem; color: var(--muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.2s; }
+    .footer-social a:hover { color: var(--text); }
+
+
+    /* TRUST */
+    .trust-section { padding: 4rem 2.5rem; border-top: 1px solid var(--border); }
+    .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 2rem; }
+    .trust-item { background: var(--surface); padding: 2rem 1.8rem; transition: background 0.2s; }
+    .trust-item:hover { background: var(--surface2); }
+    .trust-num { font-family: var(--font-head); font-size: 2.8rem; font-weight: 800; letter-spacing: -0.04em; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+    .trust-num span { font-size: 1.6rem; }
+    .trust-date { font-size: 1.8rem !important; }
+    .trust-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.6; }
+
+    @media (max-width: 900px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .cards { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) {
+      nav { padding: 0.85rem 1.2rem; } nav ul { gap: 1rem; }
+      .hero { padding: 7rem 1.2rem 3rem; }
+      .section, .social-section { padding: 3.5rem 1.2rem; }
+      .cards { grid-template-columns: 1fr; }
+      footer { padding: 1.5rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Pryvyd &gt; Dev</a>
+  <ul>
+    <li><a href="index.html" class="active" data-en="Home" data-uk="Головна" data-pl="Główna">Home</a></li>
+    <li><a href="projects.html" data-en="Projects" data-uk="Проєкти" data-pl="Projekty">Projects</a></li>
+    <li><a href="about.html" data-en="About" data-uk="Про нас" data-pl="O nas">About</a></li>
+    <li><a href="news.html" data-en="News" data-uk="Новини" data-pl="Aktualności">News</a></li>
+    <li>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('uk')">UK</button>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="hero-dot"></span>
+      <span class="hero-tag" data-en="// We build" data-uk="// Ми розробляємо" data-pl="// Tworzymy">// We build</span>
+    </div>
+    <h1>Pryvyd<em>&gt; Dev</em></h1>
+    <p class="hero-desc" data-en="We build software, games, websites, and keep things secure. Clean code. Strong solutions. Real results." data-uk="Розробляємо програми, ігри, сайти та забезпечуємо безпеку. Чистий код. Сильні рішення. Реальний результат.">
+      We build software, games, websites, and keep things secure. Clean code. Strong solutions. Real results.
+    </p>
+    <div class="btn-group">
+      <a href="projects.html" class="btn btn-primary" data-en="Our Projects" data-uk="Наші проєкти" data-pl="Nasze projekty">Our Projects</a>
+      <a href="about.html" class="btn btn-outline" data-en="Meet the team" data-uk="Про команду" data-pl="Poznaj zespół">Meet the team</a>
+    </div>
+    <div class="lang-strip">
+      <div class="lang-item">
+        <div class="lang-label" data-en="Language 01" data-uk="Мова 01">Language 01</div>
+        <div class="lang-name">C++</div>
+      </div>
+      <div class="lang-item">
+        <div class="lang-label" data-en="Language 02" data-uk="Мова 02">Language 02</div>
+        <div class="lang-name">Python</div>
+      </div>
+      <div class="lang-item">
+        <div class="lang-label" data-en="Language 03" data-uk="Мова 03">Language 03</div>
+        <div class="lang-name">Java</div>
+      </div>
+      <div class="lang-item">
+        <div class="lang-label" data-en="Language 04" data-uk="Мова 04">Language 04</div>
+        <div class="lang-name">C#</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <span class="section-tag" data-en="// What we do" data-uk="// Що ми робимо" data-pl="// Co robimy">// What we do</span>
+      <h2 class="section-title" data-en="Our Services" data-uk="Наші послуги" data-pl="Nasze usługi">Our Services</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <p class="card-num">01</p>
+        <h3 class="card-title" data-en="Software" data-uk="Програми" data-pl="Oprogramowanie">Software</h3>
+        <p class="card-desc" data-en="Desktop and server applications in C++, Python, and Java. From small utilities to complex systems built to last." data-uk="Настільні та серверні застосунки на C++, Python і Java. Від невеликих утиліт до складних систем.">Desktop and server applications in C++, Python, and Java. From small utilities to complex systems built to last.</p>
+      </div>
+      <div class="card">
+        <p class="card-num">02</p>
+        <h3 class="card-title" data-en="Games" data-uk="Ігри" data-pl="Gry">Games</h3>
+        <p class="card-desc" data-en="Games built from concept to release — independent development with full creative control and no compromises." data-uk="Ігри від концепту до релізу — незалежна розробка з повним творчим контролем без компромісів.">Games built from concept to release — independent development with full creative control and no compromises.</p>
+      </div>
+      <div class="card">
+        <p class="card-num">03</p>
+        <h3 class="card-title" data-en="Websites" data-uk="Сайти" data-pl="Strony www">Websites</h3>
+        <p class="card-desc" data-en="Modern websites designed and built from scratch. Fast, clean, and easy to manage — no bloat, no templates." data-uk="Сучасні сайти з нуля. Швидкі, чисті та зручні в управлінні — без зайвого, без шаблонів.">Modern websites designed and built from scratch. Fast, clean, and easy to manage — no bloat, no templates.</p>
+      </div>
+      <div class="card">
+        <p class="card-num">04</p>
+        <h3 class="card-title" data-en="UI / UX Design" data-uk="UI / UX Дизайн" data-pl="Design UI / UX">UI / UX Design</h3>
+        <p class="card-desc" data-en="Interface design and user experience from wireframe to final pixel. Every product we build looks and feels intentional." data-uk="Дизайн інтерфейсів і користувацький досвід від вайрфрейму до фінального пікселя. Кожен продукт виглядає і відчувається продумано.">Interface design and user experience from wireframe to final pixel. Every product we build looks and feels intentional.</p>
+      </div>
+      <div class="card">
+        <p class="card-num">05</p>
+        <h3 class="card-title" data-en="Cybersecurity" data-uk="Кібербезпека" data-pl="Cyberbezpieczeństwo">Cybersecurity</h3>
+        <p class="card-desc" data-en="Security analysis, vulnerability research, and system hardening. We find weaknesses before others do." data-uk="Аналіз безпеки, дослідження вразливостей та захист систем. Ми знаходимо слабкі місця раніше за інших.">Security analysis, vulnerability research, and system hardening. We find weaknesses before others do.</p>
+      </div>
+      <div class="card">
+        <p class="card-num">06</p>
+        <h3 class="card-title" data-en="Automation" data-uk="Автоматизація" data-pl="Automatyzacja">Automation</h3>
+        <p class="card-desc" data-en="Scripts, bots, and tools that save time. We automate repetitive tasks so you can focus on what actually matters." data-uk="Скрипти, боти та інструменти що економлять час. Ми автоматизуємо рутину щоб ви могли зосередитись на важливому.">Scripts, bots, and tools that save time. We automate repetitive tasks so you can focus on what actually matters.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-section">
+    <div class="section-header">
+      <span class="section-tag" data-en="// In numbers" data-uk="// У цифрах" data-pl="// W liczbach">// In numbers</span>
+      <h2 class="section-title" data-en="Who we are" data-uk="Хто ми" data-pl="Kim jesteśmy">Who we are</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-num">5<span>+</span></div>
+        <div class="trust-label" data-en="Team members" data-uk="Учасників команди">Team members</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">8</div>
+        <div class="trust-label" data-en="Areas of expertise" data-uk="Напрямків роботи">Areas of expertise</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">13<span>+</span></div>
+        <div class="trust-label" data-en="Stack technologies" data-uk="Технологій у стеку">Stack technologies</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">1</div>
+        <div class="trust-label" data-en="Projects released" data-uk="Випущених проєктів">Projects released</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">7</div>
+        <div class="trust-label" data-en="Social platforms" data-uk="Соціальних платформ">Social platforms</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num">4</div>
+        <div class="trust-label" data-en="Prog. languages" data-uk="Мов програмування">Prog. languages</div>
+      </div>
+
+      <div class="trust-item">
+        <div class="trust-num trust-date">Jun 8<span>, 2026</span></div>
+        <div class="trust-label" data-en="Last org update" data-uk="Останнє оновлення">Last org update</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num trust-date">Apr 12<span>, 2026</span></div>
+        <div class="trust-label" data-en="Founded" data-uk="Засновано">Founded</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="social-section">
+    <div class="section-header">
+      <span class="section-tag" data-en="// Find us" data-uk="// Ми онлайн" data-pl="// Znajdź nas">// Find us</span>
+      <h2 class="section-title" data-en="Social Media" data-uk="Соціальні мережі" data-pl="Media społecznościowe">Social Media</h2>
+    </div>
+    <div class="social-grid">
+      <a href="https://github.com/Pryvyd-Dev" class="social-link" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.instagram.com/pryvyd.dev/" class="social-link" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/pryvyd-dev/" class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.reddit.com/user/pryvyddev/" class="social-link" target="_blank" rel="noopener">Reddit</a>
+      <a href="https://www.twitch.tv/pryvyddev" class="social-link" target="_blank" rel="noopener">Twitch</a>
+      <a href="https://x.com/pryvyddev" class="social-link" target="_blank" rel="noopener">X</a>
+      <a href="https://www.youtube.com/@pryvyd-dev" class="social-link" target="_blank" rel="noopener">YouTube</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Pryvyd Dev. All rights reserved.</span>
+    <div class="footer-right"><div class="footer-social">
+      <a href="https://github.com/Pryvyd-Dev" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/pryvyd-dev/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.instagram.com/pryvyd.dev/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://x.com/pryvyddev" target="_blank" rel="noopener">X</a>
+    </div>
+    <span class="footer-version">v1.0</span></div>
+  </div>
+</footer>
+
+<script>
+  function updateTooltip() {
+    const d = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const date = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+    document.querySelectorAll('.footer-version').forEach(el => {
+      el.setAttribute('data-date', date);
+    });
+  }
+  updateTooltip();
+
+  function setLang(lang) {
+    localStorage.setItem('pd_lang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === lang));
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      if (val) el.textContent = val;
+    });
+    document.documentElement.lang = lang;
+  }
+  (function() {
+    const saved = localStorage.getItem('pd_lang') || 'en';
+    if (saved !== 'en') setLang(saved);
+  })();
+</script>
+</body>
+</html>
